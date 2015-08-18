@@ -8,40 +8,49 @@ class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
         int size = s.size();
-        
-//        if (size == 0 ) return 0;
+        if (size == 0 ) return 0;
         
         int i;
-        int max = 0;
-        
+        int max = 1;
+
+        map<char, int> myMap;
+        map<char, int>::iterator it;
+
+
+        myMap[s[0]] = 0;
+        int counts[size];
+
         for (i = 0; i < size; i++) {
-            int localMax;
-
-            map<char, int> myMap;
-            myMap[s[i]] = i;
-            int count = 1;
-            int j;
+             counts[i] = size - i;
+        }
+        
+        for (i = 1; i < size; i++) {
+            it = myMap.find(s[i]);
             
-            for (j = i + 1; myMap.find(s[j]) == myMap.end() && j< size; j++) {
-                
-                myMap[s[j]] = count;
-                count ++; 
+            if (it != myMap.end()) {
+                int previous_index = it->second;
+
+                cout << "previous_index = " <<  previous_index << "\n";
+                cout << "i = " <<  i << "\n";
+                counts[previous_index] = i - previous_index;
+                myMap.erase(it);
             }
+            myMap[s[i]] = i;
+        }
+        
+        for (i=0; i < size; i++) {
+            max = counts[i] > max ? counts[i] : max;
 
-            localMax = count;
+        }
 
-            max = localMax > max ? localMax : max;
-        } 
-        
-        
-        
+
         return max; 
     }
 };
 
 int main() {
     
-    string a("abcdeafghi");
+    string a("abaa");
 
     Solution sb;
 
